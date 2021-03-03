@@ -8,7 +8,7 @@ module.exports = {
   })],
   resolve: {
     alias: {
-      'src': path.resolve(__dirname, './src/')
+      '@': path.resolve(__dirname, './src/')
     }
   },
   module: {
@@ -32,7 +32,17 @@ module.exports = {
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: `
+                @import "src/scss-vars.scss";
+              `,
+              sassOptions: {
+                includePaths: [__dirname]
+              },
+            },
+          },
         ],
       },
     ]
