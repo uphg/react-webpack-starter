@@ -1,4 +1,4 @@
-import {a} from '@/a' // 直接引入
+import {a} from 'src/a' // 直接引入
 import {JsxDemo} from './jsx-demo.jsx';
 import {x} from './ts-demo.ts'
 import {TsxDemo} from './tsx-demo.tsx';
