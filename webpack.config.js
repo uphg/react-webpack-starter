@@ -1,6 +1,19 @@
 const ESLintPlugin = require('eslint-webpack-plugin')
 const path = require('path')
 
+const cssLoaders = (...loaders) => [
+  'style-loader',
+  {
+    loader: 'css-loader',
+    options: {
+      modules: {
+        compileType: 'icss',
+      },
+    },
+  },
+  ...loaders
+]
+
 module.exports = {
   mode: 'production',
   plugins: [new ESLintPlugin({
@@ -15,47 +28,25 @@ module.exports = {
     rules: [
       {
         test: /\.styl(us)?$/i,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                compileType: 'icss',
-              },
-            },
+        use: cssLoaders({
+          loader: 'stylus-loader',
+          options: {
+            stylusOptions: {
+              import: [path.resolve(__dirname, 'src/stylus-vars.styl')]
+            }
           },
-          {
-            loader: 'stylus-loader',
-            options: {
-              stylusOptions: {
-                import: [path.resolve(__dirname, 'src/stylus-vars.styl')]
-              }
-            },
-          }
-        ],
+        }),
       },
       {
         test: /\.less$/i,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                compileType: 'icss',
-              },
-            },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              additionalData: `
+        use: cssLoaders({
+          loader: 'less-loader',
+          options: {
+            additionalData: `
                 @import "~@/less-vars.less";
               `,
-            },
-          }
-        ],
+          },
+        }),
       },
       {
         test: /\.[jt]sx?$/,
@@ -73,16 +64,7 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/i,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              modules: {
-                compileType: 'icss',
-              },
-            },
-          },
+        use: cssLoaders(
           {
             loader: 'sass-loader',
             options: {
@@ -94,7 +76,7 @@ module.exports = {
               },
             },
           },
-        ],
+        ),
       },
     ]
   }
